@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>💐 Flores Amarillas 💐</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(to bottom, #0F0F23 0%, #1B1B3A 50%, #2D2D5F 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+            position: relative;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Estrellas de fondo */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -10;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        .star::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: white;
+            transform: translate(-50%, -50%);
+            border-radius: 1px;
+        }
+
+        .star::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: white;
+            transform: translate(-50%, -50%);
+            border-radius: 1px;
+        }
+
+        .star.small {
+            width: 2px;
+            height: 2px;
+            animation-duration: 3s;
+        }
+
+        .star.medium {
+            width: 3px;
+            height: 3px;
+            animation-duration: 2.5s;
+        }
+
+        .star.large {
+            width: 4px;
+            height: 4px;
+            animation-duration: 2s;
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px white;
+            animation: shootingStar 3s linear infinite;
+        }
+
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(to left, white, transparent);
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.3; 
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translateX(-100px) translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Luna */
+        .moon {
+            position: absolute;
+            width: clamp(60px, 12vw, 80px);
+            height: clamp(60px, 12vw, 80px);
+            background: linear-gradient(135deg, #FFF8DC 0%, #F0E68C 100%);
+            border-radius: 50%;
+            top: 10%;
+            right: 15%;
+            box-shadow: 0 0 20px rgba(255, 248, 220, 0.5);
+            z-index: -5;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #E6E6FA;
+            border-radius: 50%;
+            top: 20%;
+            left: 30%;
+            box-shadow: 
+                25px 10px 0 -5px #E6E6FA,
+                10px 35px 0 -8px #E6E6FA;
+        }
+
+        .garden {
+            position: relative;
+            width: min(400px, 90vw);
+            height: min(500px, 70vh);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Contenedor del ramo */
+        .bouquet {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .flower {
+            position: absolute;
+            width: clamp(80px, 15vw, 120px);
+            height: clamp(80px, 15vw, 120px);
+            animation: sway 4s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        /* Posicionamiento específico para el ramo */
+        .flower:nth-child(1) {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            animation-delay: 0s;
+        }
+
+        .flower:nth-child(2) {
+            top: 20px;
+            left: 10%;
+            transform: rotate(-10deg);
+            z-index: 2;
+            animation-delay: 0.5s;
+        }
+
+        .flower:nth-child(3) {
+            top: 20px;
+            right: 10%;
+            transform: rotate(10deg);
+            z-index: 2;
+            animation-delay: 1s;
+        }
+
+        .flower:nth-child(4) {
+            top: 80px;
+            left: 30%;
+            transform: rotate(-5deg);
+            z-index: 1;
+            animation-delay: 1.5s;
+        }
+
+        .flower:nth-child(5) {
+            top: 80px;
+            right: 30%;
+            transform: rotate(5deg);
+            z-index: 1;
+            animation-delay: 2s;
+        }
+
+        .petal {
+            position: absolute;
+            width: clamp(35px, 8vw, 50px);
+            height: clamp(45px, 10vw, 65px);
+            top: 50%;
+            left: 50%;
+            transform-origin: center bottom;
+            background-image: url('unnamed.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .petal:nth-child(1) {
+            transform: translate(-50%, -90%) rotate(0deg);
+        }
+
+        .petal:nth-child(2) {
+            transform: translate(-50%, -90%) rotate(45deg);
+        }
+
+        .petal:nth-child(3) {
+            transform: translate(-50%, -90%) rotate(90deg);
+        }
+
+        .petal:nth-child(4) {
+            transform: translate(-50%, -90%) rotate(135deg);
+        }
+
+        .petal:nth-child(5) {
+            transform: translate(-50%, -90%) rotate(180deg);
+        }
+
+        .petal:nth-child(6) {
+            transform: translate(-50%, -90%) rotate(225deg);
+        }
+
+        .petal:nth-child(7) {
+            transform: translate(-50%, -90%) rotate(270deg);
+        }
+
+        .petal:nth-child(8) {
+            transform: translate(-50%, -90%) rotate(315deg);
+        }
+
+        .center {
+            position: absolute;
+            width: clamp(15px, 4vw, 20px);
+            height: clamp(15px, 4vw, 20px);
+            background: radial-gradient(circle, #8B4513 0%, #D2691E 50%, #F4A460 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stem {
+            position: absolute;
+            width: clamp(4px, 1vw, 6px);
+            height: clamp(80px, 15vw, 120px);
+            background: linear-gradient(to bottom, #228B22, #006400);
+            bottom: clamp(-80px, -15vw, -100px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .leaf {
+            position: absolute;
+            width: clamp(30px, 6vw, 40px);
+            height: clamp(15px, 3vw, 20px);
+            background: linear-gradient(45deg, #32CD32, #228B22);
+            border-radius: 0 100% 0 100%;
+            bottom: -60px;
+            left: 60%;
+            transform: rotate(30deg);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .leaf:nth-child(2) {
+            left: 30%;
+            transform: rotate(-30deg) scaleX(-1);
+            bottom: -80px;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+        }
+
+        @keyframes bloom {
+            0% {
+                transform: translate(-50%, -90%) scale(0) rotate(var(--rotation));
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -90%) scale(1) rotate(var(--rotation));
+                opacity: 1;
+            }
+        }
+
+        .flower.animate .petal {
+            animation: bloom 1s ease-out forwards;
+        }
+
+        .flower.animate .petal:nth-child(1) {
+            --rotation: 0deg;
+            animation-delay: 0.1s;
+        }
+
+        .flower.animate .petal:nth-child(2) {
+            --rotation: 45deg;
+            animation-delay: 0.2s;
+        }
+
+        .flower.animate .petal:nth-child(3) {
+            --rotation: 90deg;
+            animation-delay: 0.3s;
+        }
+
+        .flower.animate .petal:nth-child(4) {
+            --rotation: 135deg;
+            animation-delay: 0.4s;
+        }
+
+        .flower.animate .petal:nth-child(5) {
+            --rotation: 180deg;
+            animation-delay: 0.5s;
+        }
+
+        .flower.animate .petal:nth-child(6) {
+            --rotation: 225deg;
+            animation-delay: 0.6s;
+        }
+
+        .flower.animate .petal:nth-child(7) {
+            --rotation: 270deg;
+            animation-delay: 0.7s;
+        }
+
+        .flower.animate .petal:nth-child(8) {
+            --rotation: 315deg;
+            animation-delay: 0.8s;
+        }
+
+        .title {
+            position: absolute;
+            top: clamp(30px, 8vh, 50px);
+            width: 100%;
+            text-align: center;
+            color: #FFD700;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255, 215, 0, 0.5);
+            z-index: 100;
+        }
+
+        .message {
+            position: absolute;
+            bottom: clamp(40px, 10vh, 80px);
+            width: 100%;
+            text-align: center;
+            color: #E6E6FA;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            z-index: 100;
+            opacity: 0.9;
+            line-height: 1.4;
+            padding: 0 20px;
+        }
+
+        .message::before {
+            content: '💫';
+            margin-right: 10px;
+        }
+
+        .message::after {
+            content: '💫';
+            margin-left: 10px;
+        }
+
+        /* Mejoras para táctil */
+        .flower {
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .flower:active {
+            transform: scale(1.1);
+            filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+        }
+    </style>
+</head>
+<body>
+    <!-- Estrellas de fondo -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Luna -->
+    <div class="moon"></div>
+    
+    <h1 class="title">🌻No hay plata🌻</h1>
+    
+    <div class="message">
+        Se intentó
+    </div>
+    
+    <div class="garden">
+        <div class="bouquet">
+            <!-- Flor 1 (centro superior) -->
+            <div class="flower animate">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="center"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                    <div class="leaf"></div>
+                </div>
+            </div>
+
+            <!-- Flor 2 (izquierda) -->
+            <div class="flower animate">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="center"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                    <div class="leaf"></div>
+                </div>
+            </div>
+
+            <!-- Flor 3 (derecha) -->
+            <div class="flower animate">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="center"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                    <div class="leaf"></div>
+                </div>
+            </div>
+
+            <!-- Flor 4 (izquierda abajo) -->
+            <div class="flower animate">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="center"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                    <div class="leaf"></div>
+                </div>
+            </div>
+
+            <!-- Flor 5 (derecha abajo) -->
+            <div class="flower animate">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="center"></div>
+                <div class="stem">
+                    <div class="leaf"></div>
+                    <div class="leaf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Crear estrellas
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = window.innerWidth < 768 ? 100 : 150; // Menos estrellas en móvil
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Tamaños aleatorios de estrellas
+                const sizes = ['small', 'medium', 'large'];
+                const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
+                star.classList.add(randomSize);
+                
+                // Posición aleatoria
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Retraso aleatorio para la animación
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Crear estrellas fugaces
+        function createShootingStar() {
+            const starsContainer = document.getElementById('stars');
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            
+            // Posición inicial aleatoria en el lado izquierdo/superior
+            shootingStar.style.left = Math.random() * 100 + '%';
+            shootingStar.style.top = Math.random() * 50 + '%';
+            
+            starsContainer.appendChild(shootingStar);
+            
+            // Remover después de la animación
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+        }
+
+        // Inicializar estrellas al cargar la página
+        createStars();
+
+        // Crear estrellas fugaces cada cierto tiempo
+        setInterval(createShootingStar, 5000);
+
+        // Crear algunas estrellas fugaces iniciales
+        setTimeout(createShootingStar, 2000);
+        setTimeout(createShootingStar, 7000);
+
+        // Efecto de toque en las flores para móvil
+        document.querySelectorAll('.flower').forEach((flower, index) => {
+            flower.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.style.transform = this.style.transform + ' scale(1.2)';
+                this.style.filter = 'brightness(1.3) drop-shadow(0 0 15px rgba(255, 215, 0, 0.8))';
+            });
+            
+            flower.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                setTimeout(() => {
+                    this.style.transform = this.style.transform.replace(' scale(1.2)', '');
+                    this.style.filter = '';
+                }, 400);
+            });
+
+            // También para click en desktop
+            flower.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.style.transform = this.style.transform + ' scale(1.2)';
+                this.style.filter = 'brightness(1.3) drop-shadow(0 0 15px rgba(255, 215, 0, 0.8))';
+                
+                setTimeout(() => {
+                    this.style.transform = this.style.transform.replace(' scale(1.2)', '');
+                    this.style.filter = '';
+                }, 400);
+            });
+        });
+
+        // Prevenir zoom en doble toque
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
